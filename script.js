@@ -1,67 +1,70 @@
-console.log('Hello!');
-const goods = [
-  { title: 'Shirt', price: 150 },
-  { title: 'Socks', price: 50 },
-  { title: 'Jacket', price: 350 },
-  { title: 'Shoes', price: 250 },
-];
-const renderGoodsItem = (title, price) => {
-  return `<div class="row p-2 bg-white border rounded mb-3">
-  <div class="col-md-3 mt-1">
-  <img
-    class="img-fluid img-responsive rounded product-image"
-    src="https://i.imgur.com/QpjAiHq.jpg"
-  />
-</div>
-<div class="col-md-6 mt-1">
-  <h5>${title}</h5>
-  <div class="d-flex flex-row"></div>
-  <div class="mt-1 mb-1 spec-1">
-    <span>100% cotton</span><span class="dot"></span
-    ><span>Light weight</span><span class="dot"></span
-    ><span>Best finish<br /></span>
-  </div>
-  <div class="mt-1 mb-1 spec-1">
-    <span>Unique design</span><span class="dot"></span
-    ><span>For men</span><span class="dot"></span
-    ><span>Casual<br /></span>
-  </div>
-  <p class="text-justify text-truncate para mb-0">
-    There are many variations of passages of Lorem Ipsum available,
-    but the majority have suffered alteration in some form, by
-    injected humour, or randomised words which don't look even
-    slightly believable.<br /><br />
-  </p>
-</div>
-<div
-  class="
-    align-items-center align-content-center
-    col-md-3
-    border-left
-    mt-1
-  "
->
-  <div class="d-flex flex-row align-items-center">
-    <h4 class="mr-1">${price}</h4>
-  </div>
-  <h6 class="text-success">бесплатная доставка</h6>
-  <div class="d-flex flex-column mt-4">
-    <button class="btn btn-primary btn-sm" type="button">
-      Подробнее</button
-    ><button
-      class="btn btn-outline-primary btn-sm mt-2"
-      type="button"
-    >
-      В коризну
-    </button>
-  </div>
-</div>
-</div>`;
+// Находим на странице кнопку
+const btn = document.querySelector("a");
+
+// Навешиваем на кнопку обработчик клика
+btn.onclick = function () {
+  let str = document.querySelector("p");
+  let textReplace = str.innerText.replace(/^'|(\s)'|'(\s)|'(\W)/g, '$1"$2$3');
+  str.innerText = textReplace;
 };
-const renderGoodsList = (list) => {
-  let goodsList = list
-    .map((item) => renderGoodsItem(item.title, item.price))
-    .join('');
-  document.querySelector('.col-md-10').innerHTML = goodsList;
+
+const submitBtn = document.querySelector('input[type="submit"]');
+
+submitBtn.onclick = function (event) {
+  event.preventDefault();
+  validName();
+  validPhone();
+  validEmail();
 };
-renderGoodsList(goods);
+
+function validPhone() {
+  let re = /(\+7)[(]\d{3}[)]\d{3}[\s-]\d{4}$/g;
+  let myPhone = document.getElementById("phone").value;
+  console.log(myPhone);
+  let valid = re.test(myPhone);
+  if (valid) {
+    document.getElementById("phone").style.border = "none";
+    document.querySelector(".err.phone").style.color = "green";
+    output = "Номер телефона введен правильно!";
+  } else {
+    document.getElementById("phone").style.border = "1px solid red";
+    document.querySelector(".err.phone").style.color = "red";
+    output = "Формат телефона +7(000)000-0000";
+  }
+  document.querySelector(".err.phone").innerHTML = output;
+  return valid;
+}
+
+function validName() {
+  let re = /^[a-zа-яё]+$/i;
+  let name = document.getElementById("username").value;
+  let valid = re.test(name);
+  if (valid) {
+    document.getElementById("username").style.border = "none";
+    document.querySelector(".err.name").style.color = "green";
+    output = "Имя введено верно!";
+  } else {
+    document.getElementById("username").style.border = "1px solid red";
+    document.querySelector(".err.name").style.color = "red";
+    output = "Имя должно содержать только буквы";
+  }
+  document.querySelector(".err.name").innerHTML = output;
+  return valid;
+}
+
+function validEmail() {
+  let re = /[a-z0-9]+@[a-z]+\.[a-z]{2}$/i;
+  let email = document.getElementById("email").value;
+  let valid = re.test(email);
+  if (valid) {
+    document.getElementById("email").style.border = "none";
+    document.querySelector(".err.email").style.color = "green";
+    output = "email верный";
+  } else {
+    document.getElementById("email").style.border = "1px solid red";
+    document.querySelector(".err.email").style.color = "red";
+    output = "Формат email не верный";
+  }
+  document.querySelector(".err.email").innerHTML = output;
+  return valid;
+}
